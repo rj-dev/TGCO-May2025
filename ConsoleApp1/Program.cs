@@ -8,7 +8,17 @@ public static class SafeCoordinates
     private static readonly HashSet<(int, int)> SafeCache = new();
     private static readonly HashSet<(int, int)> UnsafeCache = new();
 
+
     // Checks if a coordinate is safe to visit
+    /// <summary>
+    /// Safety Rule:
+    /// A coordinate is considered safe if either x or y is zero, or if the sum of the digits of the absolute value of (x * y) is less than 19. This check is implemented efficiently in the IsSafe method, which avoids string conversion and instead uses arithmetic to sum the digits.
+    /// Caching:
+    /// To optimize repeated safety checks, the class uses two hash sets: SafeCache and UnsafeCache. These store coordinates already determined to be safe or unsafe, reducing redundant calculations during traversals.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     public static bool IsSafe(int x, int y)
     {
         // Fast path for zero
@@ -29,6 +39,11 @@ public static class SafeCoordinates
     }
 
     // Calculates the total number of safe squares reachable from (0,0)
+    /// <summary>
+    /// Total Safe Squares:
+    /// The TotalSafeSquares method performs a breadth-first search (BFS) starting from (0,0), exploring all adjacent coordinates within a large bounded grid (from -9999 to 9999 in both axes). It only visits coordinates that are safe and not previously visited, using a queue for BFS and a hash set to track visited nodes. The method returns the total count of unique safe coordinates reachable from the origin.
+    /// </summary>
+    /// <returns></returns>
     public static int TotalSafeSquares()
     {
         try
@@ -101,6 +116,15 @@ public static class SafeCoordinates
     }
 
     // Finds the shortest safe path from (a, b) to (x, y)
+    /// <summary>
+    /// Shortest Safe Journey:
+    /// This method finds the shortest path between two coordinates, moving only through safe squares. It uses a bidirectional A* search (with Manhattan distance as the heuristic) for efficiency, maintaining two priority queues and two visited dictionaries for the forward and backward searches. The search alternates between expanding from the start and the target, stopping when the two searches meet. The method returns the length of the shortest safe path, or -1 if no such path exists.
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     public static int ShortestSafeJourney(int a, int b, int x, int y)
     {
         // Early validation with cache check
